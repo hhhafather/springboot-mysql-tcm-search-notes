@@ -1,0 +1,45 @@
+<div class="container mt-4">
+  <h2>经典条文列表</h2>
+
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <select class="form-select" [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
+        <option value="">所有类别</option>
+        <option *ngFor="let category of categories" [value]="category">{{category}}</option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <div class="input-group">
+        <input type="text" class="form-control" [(ngModel)]="searchKeyword" placeholder="搜索条文...">
+        <button class="btn btn-primary" (click)="onSearch()">搜索</button>
+        <button class="btn btn-secondary" (click)="clearSearch()" *ngIf="searchKeyword">清除</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="list-group">
+    <a *ngFor="let text of texts" [routerLink]="['/texts', text.id]" class="list-group-item list-group-item-action">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mb-1">{{text.title}}</h5>
+        <span class="badge bg-primary">{{text.category}}</span>
+      </div>
+      <p class="mb-1">{{text.content}}</p>
+      <small class="text-muted">难度: {{text.difficulty}}</small>
+    </a>
+  </div>
+
+  <nav *ngIf="totalPages > 1" class="mt-4">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="currentPage === 0">
+        <a class="page-link" (click)="onPageChange(currentPage - 1)" tabindex="-1">上一页</a>
+      </li>
+      <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+          [class.active]="i === currentPage">
+        <a class="page-link" (click)="onPageChange(i)">{{i + 1}}</a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+        <a class="page-link" (click)="onPageChange(currentPage + 1)">下一页</a>
+      </li>
+    </ul>
+  </nav>
+</div>

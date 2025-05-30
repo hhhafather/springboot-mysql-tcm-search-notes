@@ -1,0 +1,43 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>错题记录</h2>
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" [(ngModel)]="showUnreviewedOnly" (change)="toggleUnreviewedOnly()">
+      <label class="form-check-label">只显示未复习 ({{unreviewedCount}})</label>
+    </div>
+  </div>
+
+  <div class="list-group">
+    <div *ngFor="let answer of answers" class="list-group-item">
+      <div class="d-flex justify-content-between align-items-start">
+        <div class="flex-grow-1">
+          <h5 class="mb-1">错题详情</h5>
+          <p><strong>你的答案：</strong></p>
+          <p class="text-danger">{{answer.userAnswer}}</p>
+          <p><strong>正确答案：</strong></p>
+          <p class="text-success">{{answer.correctAnswer}}</p>
+          <small class="text-muted">记录时间：{{answer.createdAt | date}}</small>
+        </div>
+        <div class="ms-3">
+          <button *ngIf="!answer.reviewed" class="btn btn-success" (click)="markAsReviewed(answer.id!)">标记已复习</button>
+          <span *ngIf="answer.reviewed" class="badge bg-secondary">已复习</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav *ngIf="totalPages > 1" class="mt-4">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="currentPage === 0">
+        <a class="page-link" (click)="onPageChange(currentPage - 1)" tabindex="-1">上一页</a>
+      </li>
+      <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+          [class.active]="i === currentPage">
+        <a class="page-link" (click)="onPageChange(i)">{{i + 1}}</a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+        <a class="page-link" (click)="onPageChange(currentPage + 1)">下一页</a>
+      </li>
+    </ul>
+  </nav>
+</div>

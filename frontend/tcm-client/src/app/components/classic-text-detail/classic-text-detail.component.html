@@ -1,0 +1,73 @@
+<div class="container mt-4" *ngIf="text">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title">{{text.title}}</h2>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="badge bg-primary">{{text.category}}</span>
+            <small class="text-muted">难度: {{text.difficulty}}</small>
+          </div>
+          <p class="card-text">{{text.content}}</p>
+        </div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-body">
+          <h4 class="card-title">练习</h4>
+          <div class="mb-3">
+            <label class="form-label">请默写上面的条文：</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="userAnswer"></textarea>
+          </div>
+          <button class="btn btn-primary" (click)="submitAnswer()">提交</button>
+          <div *ngIf="showAnswer" class="mt-3">
+            <h5>正确答案：</h5>
+            <p>{{text.content}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h4 class="card-title">笔记</h4>
+          <div class="mb-3">
+            <textarea class="form-control" rows="2" [(ngModel)]="newNoteContent" placeholder="添加笔记..."></textarea>
+            <button class="btn btn-primary mt-2" (click)="addNote()">添加</button>
+          </div>
+          <div class="list-group">
+            <div *ngFor="let note of notes" class="list-group-item">
+              <p>{{note.content}}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">{{note.createdAt | date}}</small>
+                <div>
+                  <button class="btn btn-sm btn-outline-primary me-2" (click)="updateNote(note, note.content)">编辑</button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteNote(note.id!)">删除</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">错题记录</h4>
+          <div class="list-group">
+            <div *ngFor="let answer of incorrectAnswers" class="list-group-item">
+              <p><strong>你的答案：</strong></p>
+              <p>{{answer.userAnswer}}</p>
+              <p><strong>正确答案：</strong></p>
+              <p>{{answer.correctAnswer}}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">{{answer.createdAt | date}}</small>
+                <button *ngIf="!answer.reviewed" class="btn btn-sm btn-success" (click)="markAsReviewed(answer.id!)">标记已复习</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
