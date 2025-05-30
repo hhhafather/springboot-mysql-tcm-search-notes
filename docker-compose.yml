@@ -1,0 +1,78 @@
+services:
+  # MySQL数据库服务
+  mysql:
+    image: mysql:8.0
+    container_name: tcm-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: tcm_system
+      MYSQL_USER: tcm
+      MYSQL_PASSWORD: tcm123
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - tcm-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p123456"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 后端Spring Boot应用
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile-backend
+    container_name: tcm-backend
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+    environment:
+      # 数据库连接配置
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tcm_system?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=utf8&useUnicode=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123456
+      # JPA配置
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "false"
+      # 使用docker环境配置
+      SPRING_PROFILES_ACTIVE: docker
+      # CORS配置
+      SPRING_WEB_CORS_ALLOWED_ORIGINS: "*"
+      SPRING_WEB_CORS_ALLOWED_METHODS: "GET,POST,PUT,DELETE,OPTIONS"
+      SPRING_WEB_CORS_ALLOWED_HEADERS: "*"
+      SPRING_WEB_CORS_ALLOW_CREDENTIALS: "true"
+      SPRING_WEB_CORS_MAX_AGE: "3600"
+      # 日志级别
+      LOGGING_LEVEL_COM_EXAMPLE_EXAM1: "DEBUG"
+    networks:
+      - tcm-network
+
+  # 前端Angular应用
+  frontend:
+    build:
+      context: ./frontend/tcm-client
+      dockerfile: Dockerfile-frontend
+    container_name: tcm-frontend
+    restart: always
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - tcm-network
+
+# 定义网络
+networks:
+  tcm-network:
+    driver: bridge
+
+# 定义数据卷
+volumes:
+  mysql-data:
