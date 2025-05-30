@@ -1,0 +1,86 @@
+.card {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: none;
+  margin-bottom: 2rem;
+
+  .card-title {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+  }
+
+  .card-text {
+    color: #34495e;
+    line-height: 1.6;
+  }
+
+  .badge {
+    font-size: 0.9rem;
+    padding: 0.5em 1em;
+  }
+}
+
+.form-control {
+  &:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s;
+
+  &-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+
+    &:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+    }
+  }
+
+  &-outline-primary {
+    color: #007bff;
+    border-color: #007bff;
+
+    &:hover {
+      background-color: #007bff;
+      color: white;
+    }
+  }
+
+  &-outline-danger {
+    color: #dc3545;
+    border-color: #dc3545;
+
+    &:hover {
+      background-color: #dc3545;
+      color: white;
+    }
+  }
+}
+
+.list-group-item {
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+
+  p {
+    margin-bottom: 0.5rem;
+  }
+
+  small {
+    color: #6c757d;
+  }
+}
+
+.text-success {
+  color: #28a745;
+}
+
+.text-danger {
+  color: #dc3545;
+}
